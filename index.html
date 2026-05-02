@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcus Lite - Empowering the Everyday Investor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --gs-navy: #002b49;
+      --gs-navy-2: #073763;
+      --gs-blue: #4f8fcf;
+      --gs-blue-light: #e6f1fb;
+      --gs-gold: #d6b46a;
+      --gs-light-gold: #fbf3dc;
+      --gs-bg: #f6f7f8;
+      --gs-border: #d9dee5;
+      --gs-green: #007a5a;
+      --gs-green-light: #e6f7ef;
+      --gs-green-dark: #064e3b;
+      --gs-red: #c83d70;
+      --gs-red-light: #fff8fb;
+      --text: #172331;
+      --muted: #5c6670;
+    }
+    html, body, #root { width: 100%; min-height: 100%; margin: 0; }
+    body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--gs-bg); color: var(--text); }
+    button, input, select { font-family: inherit; }
+    button { cursor: pointer; }
+    .screen, .dashboard { width: 100vw; min-height: 100vh; }
+    .hero, .topnav { background: linear-gradient(90deg, var(--gs-navy), var(--gs-navy-2)); color: white; }
+    .hero { padding: 28px 34px; }
+    .brand { font-weight: 800; margin-bottom: 12px; }
+    .brand span { display: inline-grid; place-items: center; width: 24px; height: 24px; background: white; color: var(--gs-navy); border-radius: 4px; margin-right: 8px; }
+    .paper, .dash-content { width: 100%; margin: 0; }
+    .paper { background: white; padding: 20px 34px 28px; }
+    .sections { border-bottom: 1px solid var(--gs-border); padding-bottom: 14px; color: var(--muted); }
+    .sections b { display: inline-grid; place-items: center; width: 24px; height: 24px; background: var(--gs-navy); color: white; border-radius: 50%; margin-left: 8px; }
+    .profile-switch { display: flex; gap: 12px; align-items: center; margin: 18px 0; }
+    .profile-switch select, .dashboard-profile-select { min-width: 340px; height: 44px; padding: 0 14px; border: 2px solid var(--gs-navy); border-radius: 7px; font-weight: 700; }
+    .form-section { border-bottom: 1px solid #e8ebef; padding: 18px 0; }
+    .form-section h2 { font-size: 16px; }
+    .form-section h2 span { display: inline-grid; place-items: center; width: 24px; height: 24px; background: var(--gs-blue-light); color: var(--gs-navy); border-radius: 50%; margin-right: 10px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .field span { display: block; margin-bottom: 6px; color: var(--muted); font-weight: 700; font-size: 13px; }
+    .field input, .translate-box input, .whatif-box input { width: 100%; border: 1px solid #cfd6df; border-radius: 5px; padding: 11px; background: #fbfcfd; color: var(--text); font-weight: 600; }
+    .field input.green { background: var(--gs-green-light); border-color: var(--gs-green); }
+    .hint { color: var(--muted); font-size: 13px; }
+    .debt-row { display: grid; grid-template-columns: 1.8fr 1.2fr 1fr 1.2fr 1fr; background: #fafbfc; border-bottom: 1px solid #e8ebef; padding: 13px; }
+    .ghost, .primary { width: 100%; padding: 12px; font-weight: 800; border-radius: 5px; }
+    .ghost { background: white; border: 1px dashed #a9b3bf; color: var(--gs-navy); }
+    .primary { margin-top: 18px; background: var(--gs-navy); color: white; border: 0; }
+    .micro { text-align: center; color: white; background: var(--gs-navy); margin: 18px -34px -28px; padding: 13px; }
+    .risk-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .risk-buttons button { background: white; border: 1px solid #cfd8e3; padding: 12px; border-radius: 5px; }
+    .risk-buttons .active { background: var(--gs-blue-light); border-color: var(--gs-blue); color: var(--gs-navy); font-weight: 800; }
+    .topnav { display: flex; align-items: center; gap: 18px; padding: 8px 18px; border-bottom: 3px solid var(--gs-gold); }
+    .topnav button { background: none; border: 0; color: white; font-weight: 800; }
+    .topnav button:hover { color: var(--gs-gold); }
+    .avatar { margin-left: auto; background: var(--gs-gold); color: var(--gs-navy); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; }
+    .dash-content { padding: 20px 34px; }
+    .dash-hero-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .greeting { margin: 0; color: var(--muted); }
+    .dash-content h1 { margin: 6px 0; font-size: 30px; }
+    .dash-content h1 span { color: var(--gs-green); font-size: 16px; }
+    .subline { color: var(--muted); margin: 0; }
+    .status-grid, .two-col, .goal-grid, .bottom-grid { display: grid; gap: 14px; }
+    .status-grid { grid-template-columns: repeat(3, 1fr); margin: 24px 0 18px; }
+    .card { text-align: left; border: 1px solid var(--gs-border); border-radius: 6px; padding: 14px; background: white; min-height: 82px; color: var(--text); }
+    .card:hover { box-shadow: 0 6px 18px rgba(0, 43, 73, 0.12); transform: translateY(-1px); }
+    .card.danger { border: 2px solid var(--gs-red); background: var(--gs-red-light); }
+    .card p { margin: 0 0 5px; color: var(--muted); font-weight: 800; }
+    .card strong { display: block; color: var(--gs-green); font-size: 17px; }
+    .card.danger strong { color: var(--gs-red); }
+    .card span { font-size: 13px; }
+    .insight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+    .insight-card { border: 1px solid var(--gs-border); border-left: 4px solid var(--gs-gold); background: #fffaf0; border-radius: 6px; padding: 14px; }
+    .insight-card p { margin: 6px 0 0; line-height: 1.45; }
+    .insight-card button { margin-top: 10px; background: var(--gs-navy); color: white; border: 0; padding: 9px 12px; border-radius: 5px; font-weight: 800; }
+    .two-col { grid-template-columns: 1fr 1fr; }
+    .translate-box, .whatif-box { border: 1px solid var(--gs-border); border-radius: 6px; padding: 12px; }
+    .translate-box { background: var(--gs-navy); color: white; border-bottom: 4px solid var(--gs-gold); }
+    .whatif-box { background: #fbfcfd; }
+    .translate-box p { color: #dce8f3; }
+    .translate-box button, .whatif-box button { width: 100%; margin-top: 8px; padding: 8px; border: 0; background: var(--gs-blue); color: white; border-radius: 4px; font-weight: 800; }
+    .result-box { margin-top: 10px; background: var(--gs-light-gold); color: #4a3600; border-left: 4px solid var(--gs-gold); padding: 10px; border-radius: 4px; font-weight: 700; }
+    .result-box.light { background: var(--gs-blue-light); color: var(--gs-navy); border-left-color: var(--gs-blue); }
+    .section-head { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+    .holding-row { display: grid; grid-template-columns: 3fr 1.2fr 1.2fr 2fr; align-items: center; padding: 12px 8px; border-bottom: 1px solid #e8ebef; }
+    .holding-row span { color: var(--muted); }
+    .gain { color: var(--gs-green); font-weight: 900; }
+    .loss { color: var(--gs-red); font-weight: 900; }
+    .spark { width: 100%; height: 24px; }
+    .spark polyline { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .spark.up polyline { stroke: var(--gs-green); }
+    .spark.down polyline { stroke: var(--gs-red); }
+
+    .allocation { padding: 22px 0; border-bottom: 1px solid #e8ebef; }
+    .alloc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px; }
+    .alloc-header h3 { margin: 0; }
+    .alloc-status { background: var(--gs-light-gold); color: #5c4300; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 12px; border: 1px solid var(--gs-gold); }
+    .alloc-status.aligned { background: var(--gs-green-light); color: var(--gs-green-dark); border-color: var(--gs-green); }
+    .alloc-label { font-size: 11px; color: var(--muted); font-weight: 800; margin-top: 14px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .alloc-label.target { color: #94a3b8; }
+    .alloc-bar { display: flex; height: 32px; border-radius: 5px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .alloc-bar.target-bar { height: 16px; opacity: 0.55; }
+    .alloc-segment { display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 11px; transition: width 0.5s ease; }
+    .alloc-bar.target-bar .alloc-segment { font-size: 9px; }
+    .alloc-list { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+    .alloc-row { display: grid; grid-template-columns: 14px 1.6fr 65px 90px 95px; gap: 12px; align-items: center; padding: 10px 12px; background: #fafbfc; border-radius: 5px; border-left: 4px solid transparent; }
+    .alloc-row.off-target { border-left-color: var(--gs-gold); background: var(--gs-light-gold); }
+    .alloc-row.on-target { border-left-color: var(--gs-green); }
+    .alloc-color { width: 14px; height: 14px; border-radius: 3px; }
+    .alloc-row strong { font-size: 13px; }
+    .alloc-now { font-size: 13px; font-weight: 800; }
+    .alloc-target { font-size: 12px; color: var(--muted); }
+    .alloc-row em { font-style: normal; font-weight: 800; font-size: 12px; color: #5c4300; text-align: right; }
+    .alloc-row em.ok { color: var(--gs-green); }
+
+    .risk-check { display: grid; grid-template-columns: 1fr 360px; gap: 24px; margin-top: 28px; align-items: start; }
+    .risk-left h3 { text-align: center; }
+    .risk-line { display: flex; justify-content: space-between; font-size: 13px; }
+    .bar { height: 8px; background: #edf0f3; margin: 6px 0; }
+    .bar i { display: block; height: 100%; transition: width 0.4s ease, background 0.4s ease; }
+    .blue i { background: var(--gs-blue); }
+    .pinkbar i { background: var(--gs-red); }
+    .fixApplied .pinkbar i { background: var(--gs-green); }
+    .pink { color: var(--gs-red); }
+    .green-label { color: var(--gs-green); }
+    .fix-card { background: var(--gs-navy); color: white; padding: 14px; border-radius: 6px; text-align: center; border-bottom: 4px solid var(--gs-gold); }
+    .fix-card p { margin: 0; color: #dce8f3; }
+    .fix-card strong { display: block; margin: 6px 0; }
+    .fix-card button { width: 100%; background: white; color: var(--gs-navy); border: 0; padding: 8px; border-radius: 4px; font-weight: 800; }
+    .applied-note { margin-top: 12px; background: var(--gs-green-light); color: var(--gs-green-dark); border-left: 4px solid var(--gs-green); padding: 12px; font-weight: 700; }
+    .goals h3 { text-align: center; }
+    .goal-grid { grid-template-columns: 1fr 1fr; }
+    .goal { border: 1px solid var(--gs-border); padding: 12px; background: white; }
+    .goal.goal-applied { background: var(--gs-green-light); border-color: var(--gs-green); }
+    .goal div:first-child { display: flex; justify-content: space-between; }
+    .goal span { color: var(--gs-green); font-weight: 900; }
+    .progress { height: 7px; background: #edf0f3; margin: 9px 0; }
+    .progress i { display: block; height: 100%; background: var(--gs-green); transition: width 0.4s ease; }
+    .market-banner { margin: 18px 0 8px; background: var(--gs-light-gold); border-left: 4px solid var(--gs-gold); padding: 13px; color: #5c4300; font-weight: 700; }
+    .bottom-grid { grid-template-columns: 0.9fr 1.3fr; }
+    .debts, .combo { border: 1px solid var(--gs-border); padding: 14px; }
+    .priority { display: grid; grid-template-columns: 2fr 1fr 1fr; border-left: 4px solid #aaa; padding: 10px; border-bottom: 1px solid #e8ebef; }
+    .priority.high { border-left-color: var(--gs-red); }
+    .priority.medium { border-left-color: var(--gs-gold); }
+    .priority.low { border-left-color: #94a3b8; }
+    .priority em { color: var(--gs-red); font-style: normal; font-weight: 900; }
+    .combo { background: var(--gs-navy); color: white; border-bottom: 4px solid var(--gs-gold); }
+    .combo.combo-applied { box-shadow: 0 0 0 3px rgba(214, 180, 106, 0.35); }
+    .combo h3 { color: var(--gs-gold); }
+    .combo p { color: white; line-height: 1.45; margin: 8px 0; }
+    .move-item { padding: 10px 0; border-bottom: 1px solid rgba(214, 180, 106, 0.25); }
+    .move-item:last-of-type { border-bottom: 0; }
+    .move-action { margin: 0 0 6px !important; color: white; font-size: 13px; line-height: 1.5; }
+    .move-action b { color: var(--gs-gold); margin-right: 4px; }
+    .move-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11px; }
+    .move-impact { color: var(--gs-gold); font-weight: 700; }
+    .move-tax { color: #dce8f3; font-weight: 600; }
+
+    .scenarios { padding: 22px 0 16px; border-bottom: 1px solid #e8ebef; }
+    .scenarios h3 { margin: 0 0 4px; }
+    .scenario-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 10px; }
+    .sc-chip {
+      background: white; border: 1px solid var(--gs-border);
+      padding: 6px 11px; border-radius: 20px;
+      font-weight: 700; font-size: 11px; color: var(--gs-navy);
+      transition: all 0.15s ease;
+    }
+    .sc-chip:hover { border-color: var(--gs-gold); }
+    .sc-chip.active {
+      background: var(--gs-gold); color: var(--gs-navy);
+      border-color: var(--gs-gold);
+    }
+    .scenario-result {
+      margin-top: 10px;
+      background: var(--gs-light-gold);
+      border-left: 4px solid var(--gs-gold);
+      border-radius: 5px; padding: 12px;
+    }
+    .scenario-title { margin: 0 0 10px; font-size: 13px; font-weight: 800; color: #5c4300; }
+    .scenario-numbers {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 6px; margin-bottom: 10px;
+      background: white; border-radius: 5px; padding: 9px;
+    }
+    .sc-num { flex: 1; text-align: center; }
+    .sc-num span { display: block; font-size: 9px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+    .sc-num strong { font-size: 14px; color: var(--gs-navy); }
+    .sc-num strong.loss { color: var(--gs-red); }
+    .sc-num strong.gain { color: var(--gs-green); }
+    .sc-arrow { color: var(--gs-gold); font-size: 16px; font-weight: 800; }
+    .scenario-move { background: white; border-radius: 5px; padding: 10px 12px; }
+    .sc-label { margin: 0 0 4px; font-size: 10px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; }
+    .sc-action { margin: 0 0 8px; font-size: 12px; color: var(--gs-navy); font-weight: 700; line-height: 1.45; }
+    .sc-footer { display: flex; gap: 10px; flex-wrap: wrap; padding: 6px 0; border-top: 1px solid #f0f2f4; border-bottom: 1px solid #f0f2f4; margin-bottom: 6px; }
+    .sc-impact { color: var(--gs-green); font-weight: 700; font-size: 11px; }
+    .sc-tax { color: var(--muted); font-weight: 600; font-size: 11px; }
+    .sc-why { margin: 0; font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .sc-why b { color: var(--gs-navy); }
+    .combo button { width: 100%; padding: 9px; background: white; color: var(--gs-navy); border: 0; border-radius: 4px; font-weight: 800; margin-top: 12px; }
+    .plan-success { margin-top: 12px; background: var(--gs-green-light); color: var(--gs-green-dark); border-left: 4px solid var(--gs-green); padding: 12px; font-weight: 800; }
+    .history-panel { margin-top: 14px; border: 1px solid var(--gs-border); border-left: 4px solid var(--gs-blue); background: var(--gs-blue-light); border-radius: 6px; padding: 14px; }
+    .history-panel h3 { color: var(--gs-navy); }
+    .looking { margin-top: 12px; background: var(--gs-green-light); border-left: 4px solid var(--gs-green); padding: 13px; color: var(--gs-green-dark); }
+    footer { display: grid; grid-template-columns: repeat(4, 1fr); background: #f0f2f4; margin: 20px -34px -20px; padding: 16px 34px; border-top: 1px solid var(--gs-border); font-size: 13px; }
+    footer b { color: var(--gs-navy); }
+
+    .transparency-fab {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--gs-navy); color: white;
+      border: 3px solid var(--gs-gold); border-radius: 30px;
+      padding: 12px 20px; display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 13px;
+      box-shadow: 0 6px 20px rgba(0, 43, 73, 0.35);
+      z-index: 100;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .transparency-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 43, 73, 0.45); }
+    .fab-icon {
+      width: 22px; height: 22px;
+      background: var(--gs-gold); color: var(--gs-navy);
+      border-radius: 50%; display: grid; place-items: center;
+      font-size: 13px; font-weight: 900;
+    }
+    .backdrop { position: fixed; inset: 0; background: rgba(0, 17, 30, 0.55); z-index: 200; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .transparency-panel {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 440px; max-width: 92vw;
+      background: white; z-index: 201;
+      padding: 28px 26px 80px;
+      overflow-y: auto;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.25s ease;
+      border-left: 5px solid var(--gs-gold);
+    }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .transparency-panel h3 { color: var(--gs-navy); margin: 0 0 6px; font-size: 19px; }
+    .transparency-panel .close-btn {
+      position: absolute; top: 14px; right: 14px;
+      background: none; border: 0; font-size: 22px;
+      color: var(--muted); width: 32px; height: 32px; border-radius: 50%;
+    }
+    .transparency-panel .close-btn:hover { background: #f0f2f4; color: var(--gs-navy); }
+    .trans-section { margin-top: 22px; }
+    .trans-section h4 {
+      color: var(--gs-navy); margin: 0 0 10px; font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      border-bottom: 2px solid var(--gs-gold); padding-bottom: 6px;
+    }
+    .trans-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f0f2f4; font-size: 13px; }
+    .trans-row span { color: var(--muted); }
+    .trans-row b { font-weight: 800; color: var(--text); }
+    .trans-row b.pos { color: var(--gs-green); }
+    .trans-row b.warn { color: var(--gs-red); }
+    .trans-section ul { margin: 0; padding-left: 18px; }
+    .trans-section li { margin-bottom: 9px; line-height: 1.5; font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .grid3, .grid2, .status-grid, .two-col, .goal-grid, .bottom-grid, .risk-check, .insight-row, footer { grid-template-columns: 1fr; }
+      .dash-hero-row { flex-direction: column; }
+      .profile-switch { flex-direction: column; align-items: stretch; }
+      .profile-switch select, .dashboard-profile-select { min-width: 100%; }
+      .alloc-row { grid-template-columns: 14px 1fr 50px 60px 70px; gap: 8px; padding: 8px; }
+      .alloc-row strong { font-size: 12px; }
+      .scenario-numbers { flex-direction: column; gap: 8px; }
+      .sc-arrow { transform: rotate(90deg); }
+      .transparency-fab { bottom: 16px; right: 16px; padding: 10px 14px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel" data-presets="react">
+    const { useMemo, useState } = React;
+
+    const USD_INR = 94.85;
+    function usdFromInr(n) {
+      return '$' + Math.round(n / USD_INR).toLocaleString('en-US');
+    }
+
+    const profiles = {
+      maya: {
+        name: 'Maya', age: 27, location: 'Texas, US',
+        mainIncome: '$6,000 / month', sideIncome: '$400 freelance', steadiness: 'Pretty steady',
+        riskFeeling: 'A little uneasy', bigPlan: 'Might want a car loan next year, planning a wedding in 2027',
+        savings: '$2,400', health: 72, riskMatch: 'Mismatch',
+        totalValue: 552624, gain: 157263, gainPercent: 39.8,
+        comfortWidth: 48, riskWidth: 82, fixedRiskWidth: 48,
+        comfortLabel: 'Moderate',
+        totalDebt: '$298,500',
+        breakdown: 'Your score is pulled down by low emergency savings and portfolio risk being higher than your comfort level. Stable income helps your score.',
+        review: 'Best next step: use selected gains from high-performing holdings to fund your house/car cushion while avoiding panic-selling loss-making assets.',
+        goals: [
+          { name: 'House down payment', progress: 62, appliedProgress: 70, text: '$31,000 of $50,000 by 2028', appliedText: '$35,000 of $50,000 by 2028', status: 'On track' },
+          { name: 'Emergency fund', progress: 27, appliedProgress: 35, text: '$2,400 of $9,000 target', appliedText: '$3,150 of $9,000 target', status: 'Behind' },
+        ],
+        debts: [
+          { name: 'Student loan', owed: '$18,500', rate: '4.5%', monthly: '$200', years: '8', priority: 'low' },
+          { name: 'House loan', owed: '$280,000', rate: '6.5%', monthly: '$1,650', years: '22', priority: 'medium' },
+        ],
+        moves: [
+          { action: 'Sell $2,400 of Quant Small Cap (currently up $250). Move to House goal cushion.', impact: 'Moves house goal forward by ~4 months.', tax: 'Estimated tax: ~$38' },
+          { action: 'Hold INFY and LICI (both at a loss). Selling now locks in losses.', impact: 'Protects $2,768 from being crystallised as loss.', tax: 'Estimated tax: $0' },
+          { action: 'Shift $1,800 from Mirae Asset Midcap to Bandhan Value Fund.', impact: 'Reduces bumpiness, keeps house goal on track.', tax: 'Estimated tax: ~$28' },
+        ],
+        translatePrompt: 'Market is down 3.2% this week and recession fears are rising.',
+        translateResult: 'Plain English: this does not mean sell everything. Since your income is steady and you have a house goal, protect cash, avoid panic-selling, and use only selected gains for near-term goals.',
+        whatIfPrompt: 'What if I need a car loan next year?',
+        whatIfResult: 'Plan: keep your emergency fund untouched, trim a little high-risk exposure, and direct part of your gains toward the car/house cushion.',
+        appliedMessage: 'Plan applied: house goal funding increased, emergency cushion improved, and near-term risk reduced.',
+        history: ['Joined 8 months ago', 'Added house down payment goal', 'Market dip detected this week', 'Risk fix recommended today'],
+        allocation: [
+          { name: 'Large cap funds', current: 28, target: 30, applied: 30, color: 'var(--gs-navy)' },
+          { name: 'Mid cap funds', current: 24, target: 20, applied: 22, color: 'var(--gs-blue)' },
+          { name: 'Small cap funds', current: 23, target: 10, applied: 13, color: 'var(--gs-red)' },
+          { name: 'Value/diversified', current: 20, target: 25, applied: 22, color: 'var(--gs-gold)' },
+          { name: 'Cash & bonds', current: 5, target: 15, applied: 13, color: 'var(--gs-green)' },
+        ],
+      },
+      arjun: {
+        name: 'Arjun', age: 31, location: 'Dallas, US',
+        mainIncome: '$9,500 / month', sideIncome: '$1,000 consulting', steadiness: 'Very steady',
+        riskFeeling: 'Very calm', bigPlan: 'Planning to buy a house and invest aggressively',
+        savings: '$8,700', health: 81, riskMatch: 'Slightly aggressive',
+        totalValue: 552624, gain: 157263, gainPercent: 39.8,
+        comfortWidth: 70, riskWidth: 88, fixedRiskWidth: 70,
+        comfortLabel: 'Growth',
+        totalDebt: '$33,800',
+        breakdown: 'Your score is strong because income and savings are steady. The main issue is high growth exposure combined with an upcoming house plan.',
+        review: 'Best next step: trim a small portion of high-gain equity and reduce small-cap concentration so the house fund is less exposed to volatility.',
+        goals: [
+          { name: 'House down payment', progress: 76, appliedProgress: 84, text: '$76,000 of $100,000 by 2028', appliedText: '$84,000 of $100,000 by 2028', status: 'On track' },
+          { name: 'Emergency fund', progress: 58, appliedProgress: 65, text: '$8,700 of $15,000 target', appliedText: '$9,750 of $15,000 target', status: 'On track' },
+        ],
+        debts: [
+          { name: 'Personal loan', owed: '$9,800', rate: '14.5%', monthly: '$350', years: '3', priority: 'high' },
+          { name: 'Auto loan', owed: '$24,000', rate: '7.2%', monthly: '$520', years: '5', priority: 'medium' },
+        ],
+        moves: [
+          { action: 'Sell $5,000 of Quant Small Cap (up $923). Move to House goal cushion.', impact: 'Moves house goal forward by ~6 months.', tax: 'Estimated tax: ~$138' },
+          { action: 'Sell $3,200 of Mirae Asset Midcap. Pay down Personal loan at 14.5%.', impact: 'Saves ~$1,400 in interest over loan life.', tax: 'Estimated tax: ~$96' },
+          { action: 'Hold core large cap funds. Add $500/month to Bandhan Value Fund.', impact: 'Smooths volatility, builds steady value cushion.', tax: 'Estimated tax: $0' },
+        ],
+        translatePrompt: 'Small-cap stocks dropped sharply this week after inflation news.',
+        translateResult: 'Plain English: your portfolio can handle risk, but your small-cap exposure is high. Do not exit fully. Trim selected gains and protect the house timeline.',
+        whatIfPrompt: 'What if I buy a house in 2028?',
+        whatIfResult: 'Plan: use part of equity gains to strengthen the down payment fund. Keep growth investments, but reduce concentration so the house goal is not dependent on market mood.',
+        appliedMessage: 'Plan applied: house funding increased and small-cap concentration reduced by 8%.',
+        history: ['Joined 8 months ago', 'Added house purchase goal', 'Small-cap risk increased last month', 'Rebalance action recommended today'],
+        allocation: [
+          { name: 'Large cap funds', current: 22, target: 25, applied: 25, color: 'var(--gs-navy)' },
+          { name: 'Mid cap funds', current: 28, target: 25, applied: 26, color: 'var(--gs-blue)' },
+          { name: 'Small cap funds', current: 32, target: 20, applied: 22, color: 'var(--gs-red)' },
+          { name: 'Value/diversified', current: 14, target: 20, applied: 18, color: 'var(--gs-gold)' },
+          { name: 'Cash & bonds', current: 4, target: 10, applied: 9, color: 'var(--gs-green)' },
+        ],
+      },
+      sofia: {
+        name: 'Sofia', age: 24, location: 'Austin, US',
+        mainIncome: '$4,800 / month', sideIncome: '$150 tutoring', steadiness: 'Somewhat steady',
+        riskFeeling: "I'd panic", bigPlan: 'May start graduate school next year',
+        savings: '$1,600', health: 64, riskMatch: 'Too risky',
+        totalValue: 552624, gain: 157263, gainPercent: 39.8,
+        comfortWidth: 30, riskWidth: 78, fixedRiskWidth: 36,
+        comfortLabel: 'Conservative',
+        totalDebt: '$16,000',
+        breakdown: 'Your score is lower because your comfort with risk is low, but the portfolio has too much aggressive exposure. Emergency savings need attention first.',
+        review: 'Best next step: pause new risky investments, build cash for school, and move part of small-cap exposure into steadier funds.',
+        goals: [
+          { name: 'Emergency fund', progress: 18, appliedProgress: 30, text: '$1,600 of $9,000 target', appliedText: '$2,700 of $9,000 target', status: 'Behind' },
+          { name: 'Education cushion', progress: 24, appliedProgress: 38, text: '$2,400 of $10,000 target', appliedText: '$3,800 of $10,000 target', status: 'Behind' },
+        ],
+        debts: [
+          { name: 'Student loan', owed: '$16,000', rate: '5.2%', monthly: '$180', years: '9', priority: 'medium' },
+        ],
+        moves: [
+          { action: 'Sell $3,000 of Quant Small Cap. Move to Emergency fund cash.', impact: 'Moves emergency goal forward by ~5 months.', tax: 'Estimated tax: ~$45' },
+          { action: 'Shift $2,500 from Mirae Asset Midcap to SBI Large & Midcap.', impact: 'Cuts bumpiness by 15%. Matches comfort zone.', tax: 'Estimated tax: ~$25' },
+          { action: 'Pause new SIP investments for 3 months. Build cash for grad school.', impact: 'Education cushion grows by ~$1,400.', tax: 'Estimated tax: $0' },
+        ],
+        translatePrompt: 'The market may stay volatile for the next few months.',
+        translateResult: 'Plain English: since you said you would panic if money dropped 20%, your portfolio should feel calmer. Build cash first and reduce small-cap exposure.',
+        whatIfPrompt: 'What if I start graduate school next year?',
+        whatIfResult: 'Plan: keep more cash available for tuition and living costs. Prioritize emergency savings first, then invest gradually after your school plan is clearer.',
+        appliedMessage: 'Plan applied: emergency savings improved and risky exposure moved into steadier funds.',
+        history: ['Joined 8 months ago', 'Added education cushion goal', 'Risk comfort updated to conservative', 'Emergency-first plan recommended today'],
+        allocation: [
+          { name: 'Large cap funds', current: 30, target: 25, applied: 26, color: 'var(--gs-navy)' },
+          { name: 'Mid cap funds', current: 25, target: 15, applied: 17, color: 'var(--gs-blue)' },
+          { name: 'Small cap funds', current: 20, target: 5, applied: 8, color: 'var(--gs-red)' },
+          { name: 'Value/diversified', current: 20, target: 25, applied: 23, color: 'var(--gs-gold)' },
+          { name: 'Cash & bonds', current: 5, target: 30, applied: 26, color: 'var(--gs-green)' },
+        ],
+      },
+    };
+
+    const holdings = [
+      { name: 'BAJFINANCE', type: 'Stock', value: 8349.5, gain: 3872.5 },
+      { name: 'COALINDIA', type: 'Stock', value: 9040, gain: 5936 },
+      { name: 'INFY', type: 'Stock', value: 6445, gain: -570 },
+      { name: 'JINDALSTEL', type: 'Stock', value: 11552, gain: 7351 },
+      { name: 'LICI', type: 'Stock', value: 11362.5, gain: -2197.5 },
+      { name: 'NSLNISP', type: 'Stock', value: 710.2, gain: -1412.39 },
+      { name: 'SBI Large & Midcap', type: 'Mutual fund', value: 126617, gain: 21615 },
+      { name: 'Mirae Asset Midcap', type: 'Mutual fund', value: 132107, gain: 27107 },
+      { name: 'Quant Small Cap', type: 'Mutual fund', value: 128674, gain: 23673 },
+      { name: 'Bandhan Value Fund', type: 'Mutual fund', value: 120963, gain: 15963 },
+    ];
+
+    function App() {
+      const [page, setPage] = useState('intro');
+      const [selected, setSelected] = useState('maya');
+      const [translated, setTranslated] = useState(false);
+      const [planned, setPlanned] = useState(false);
+      const [fixApplied, setFixApplied] = useState(false);
+      const [planApplied, setPlanApplied] = useState(false);
+      const [breakdownOpen, setBreakdownOpen] = useState(false);
+      const [reviewOpen, setReviewOpen] = useState(false);
+      const [historyOpen, setHistoryOpen] = useState(false);
+      const [transparencyOpen, setTransparencyOpen] = useState(false);
+      const [scenario, setScenario] = useState(null);
+
+      const profile = profiles[selected];
+      const total = useMemo(() => holdings.reduce((sum, h) => sum + h.value, 0), []);
+
+      function changeProfile(value) {
+        setSelected(value);
+        setTranslated(false);
+        setPlanned(false);
+        setFixApplied(false);
+        setPlanApplied(false);
+        setBreakdownOpen(false);
+        setReviewOpen(false);
+        setHistoryOpen(false);
+        setTransparencyOpen(false);
+        setScenario(null);
+      }
+
+      function jumpTo(id) {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      const allocOffTarget = profile.allocation.reduce((sum, a) => {
+        const cur = fixApplied ? a.applied : a.current;
+        return sum + Math.max(0, Math.abs(cur - a.target));
+      }, 0);
+      const allocAligned = allocOffTarget <= 8;
+
+      if (page === 'intro') {
+        return (
+          <div className="screen">
+            <header className="hero">
+              <div className="brand"><span>G</span> Marcus Lite</div>
+              <h1>Tell us about your money</h1>
+              <p>Six quick sections. No finance jargon. About 4 minutes.</p>
+            </header>
+            <main className="paper">
+              <div className="sections">Sections: <b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b></div>
+              <div className="profile-switch">
+                <label>Demo profile</label>
+                <select value={selected} onChange={(e) => changeProfile(e.target.value)}>
+                  <option value="maya">Maya - moderate risk, steady income</option>
+                  <option value="arjun">Arjun - aggressive, high income</option>
+                  <option value="sofia">Sofia - conservative, beginner investor</option>
+                </select>
+              </div>
+              <Section n="1" title="Who you are">
+                <div className="grid3">
+                  <Field label="What should we call you?" value={profile.name} />
+                  <Field label="Your age" value={profile.age} />
+                  <Field label="Where you live" value={profile.location} />
+                </div>
+              </Section>
+              <Section n="2" title="How money comes in">
+                <div className="grid3">
+                  <Field label="Main paycheck (after tax)" value={profile.mainIncome} />
+                  <Field label="Anything on the side?" value={profile.sideIncome} />
+                  <Field label="How steady is it?" value={profile.steadiness} green />
+                </div>
+              </Section>
+              <Section n="3" title="What you owe">
+                <p className="hint">Tell us about each loan. We use this to plan smart goal funding later.</p>
+                {profile.debts.map((d) => (
+                  <div className="debt-row" key={d.name}>
+                    <strong>{d.name}</strong>
+                    <span>Owed<br />{d.owed}</span>
+                    <span>Rate<br />{d.rate}</span>
+                    <span>Monthly<br />{d.monthly}</span>
+                    <span>Years left<br />{d.years}</span>
+                  </div>
+                ))}
+                <button className="ghost">+ Add another loan</button>
+              </Section>
+              <Section n="4" title="What you're saving for">
+                <div className="grid3">
+                  <Field label="Emergency cushion" value="$9,000 by Dec 2026" />
+                  <Field label="House upgrade" value="$50,000 down by 2028" />
+                  <Field label="Retirement" value="$1M by 2065" />
+                </div>
+              </Section>
+              <Section n="5" title="What you have, and what's coming">
+                <div className="grid2">
+                  <Field label="Cash savings" value={profile.savings} />
+                  <Field label="Investments already started" value={usdFromInr(total)} />
+                </div>
+                <Field label="Big plans coming up?" value={`"${profile.bigPlan}"`} />
+              </Section>
+              <Section n="6" title="How you feel about risk">
+                <p className="hint">If your money dropped 20% next month, how would you feel?</p>
+                <div className="risk-buttons">
+                  <button className={profile.riskFeeling === 'Very calm' ? 'active' : ''}>Very calm</button>
+                  <button className={profile.riskFeeling === 'A little uneasy' ? 'active' : ''}>A little uneasy</button>
+                  <button className={profile.riskFeeling === "I'd panic" ? 'active' : ''}>I'd panic</button>
+                </div>
+              </Section>
+              <button className="primary" onClick={() => setPage('dashboard')}>See my dashboard</button>
+              <p className="micro">You can change any answer later. We update your plan automatically.</p>
+            </main>
+          </div>
+        );
+      }
+
+      return (
+        <div className="dashboard">
+          <nav className="topnav">
+            <div className="brand small"><span>G</span> Marcus Lite</div>
+            <button onClick={() => setPage('intro')}>Home</button>
+            <button onClick={() => jumpTo('translate-section')}>Translate</button>
+            <button onClick={() => jumpTo('whatif-section')}>What if</button>
+            <button onClick={() => jumpTo('allocation-section')}>Allocation</button>
+            <button onClick={() => jumpTo('goals-section')}>Goals</button>
+            <button onClick={() => setHistoryOpen(!historyOpen)}>History</button>
+            <div className="avatar">{profile.name[0]}</div>
+          </nav>
+          <main className="dash-content">
+            <div className="dash-hero-row">
+              <div>
+                <p className="greeting">Good afternoon, {profile.name}</p>
+                <h1>{usdFromInr(profile.totalValue)} <span>+{usdFromInr(profile.gain)} (+{profile.gainPercent}%)</span></h1>
+                <p className="subline">since you started, 8 months ago</p>
+              </div>
+              <select className="dashboard-profile-select" value={selected} onChange={(e) => changeProfile(e.target.value)}>
+                <option value="maya">Maya - moderate risk</option>
+                <option value="arjun">Arjun - aggressive</option>
+                <option value="sofia">Sofia - conservative</option>
+              </select>
+            </div>
+            <div className="status-grid">
+              <Card title="Health score" main={`${planApplied ? profile.health + 5 : profile.health} / 100`} note="Tap for breakdown ⓘ" onClick={() => setBreakdownOpen(!breakdownOpen)} />
+              <Card danger={!fixApplied} title="Risk match" main={fixApplied ? 'Matched' : profile.riskMatch} note={fixApplied ? 'Fix applied ✓' : 'Fix in 1 tap ↗'} onClick={() => setFixApplied(!fixApplied)} />
+              <Card title="This week's action" main={planApplied ? 'Goal plan active' : 'Fund your next big goal'} note="Review ↗" onClick={() => setReviewOpen(!reviewOpen)} />
+            </div>
+            {(breakdownOpen || reviewOpen) && (
+              <div className="insight-row">
+                {breakdownOpen && <div className="insight-card"><strong>Health score breakdown</strong><p>{profile.breakdown}</p></div>}
+                {reviewOpen && <div className="insight-card"><strong>This week's action review</strong><p>{profile.review}</p><button onClick={() => setPlanApplied(true)}>Apply reviewed plan</button></div>}
+              </div>
+            )}
+            <div className="two-col">
+              <div className="translate-box" id="translate-section">
+                <h3>Translate this</h3>
+                <p>Confused by news, an email, or a scary tweet? Paste it.</p>
+                <input value={profile.translatePrompt} readOnly />
+                <button onClick={() => setTranslated(!translated)}>{translated ? 'Hide translation' : 'Translate'}</button>
+                {translated && <div className="result-box">{profile.translateResult}</div>}
+              </div>
+              <div className="whatif-box" id="whatif-section">
+                <h3>What if</h3>
+                <p>Pick a quick scenario or type your own worry.</p>
+                <div className="scenario-chips">
+                  <button className={scenario === 'crash' ? 'sc-chip active' : 'sc-chip'} onClick={() => { setScenario(scenario === 'crash' ? null : 'crash'); setPlanned(false); }}>Market drops 20%</button>
+                  <button className={scenario === 'inflation' ? 'sc-chip active' : 'sc-chip'} onClick={() => { setScenario(scenario === 'inflation' ? null : 'inflation'); setPlanned(false); }}>Inflation stays high</button>
+                  <button className={scenario === 'withdraw' ? 'sc-chip active' : 'sc-chip'} onClick={() => { setScenario(scenario === 'withdraw' ? null : 'withdraw'); setPlanned(false); }}>Need 20% cash next year</button>
+                </div>
+                <input value={profile.whatIfPrompt} readOnly />
+                <button onClick={() => { setPlanned(!planned); setScenario(null); }}>{planned ? 'Hide plan' : 'Plan for it'}</button>
+                {planned && <div className="result-box light">{profile.whatIfResult}</div>}
+
+                {scenario && (() => {
+                  const v = profile.totalValue;
+                  let sd;
+                  if (scenario === 'crash') {
+                    const after = Math.round(v * 0.8);
+                    sd = {
+                      title: 'If the market drops 20% tomorrow',
+                      before: v, after, deltaLabel: 'Drop', deltaValue: after - v,
+                      move: profile.name === 'Sofia' ? 'Shift $2,500 from Quant Small Cap to SBI Large & Midcap.' : 'Hold steady. Do not sell loss-making positions during a dip.',
+                      why: 'Selling at the bottom locks in losses. Large cap and value funds recover faster than small cap.',
+                      goal: profile.name === 'Sofia' ? 'Education cushion stays on track.' : 'Your house goal timeline does not change if you hold.',
+                      tax: 'Estimated tax: $0 (no sale needed)',
+                    };
+                  } else if (scenario === 'inflation') {
+                    const after = Math.round(v * 0.94);
+                    sd = {
+                      title: 'If inflation stays high for 12 months',
+                      before: v, after, deltaLabel: 'Real value loss', deltaValue: after - v,
+                      move: 'Shift $4,200 from Mid cap funds into Bandhan Value Fund and Cash & bonds.',
+                      why: 'Value stocks and bonds historically lag less in high-inflation periods. Growth funds suffer most.',
+                      goal: profile.name === 'Maya' ? 'House goal timeline holds steady.' : 'Goal timeline holds steady within 1 month tolerance.',
+                      tax: 'Estimated tax: ~$95 (short-term gains on Mid cap)',
+                    };
+                  } else {
+                    const need = Math.round(v * 0.2);
+                    sd = {
+                      title: 'If you need 20% in cash next year',
+                      before: v, after: v - need, deltaLabel: 'Cash you can pull', deltaValue: need,
+                      move: 'Sell INFY and LICI first (both at a loss, $0 tax). Then sell $' + (need - 90).toLocaleString() + ' of Bandhan Value Fund.',
+                      why: 'Selling losing positions first uses tax-loss harvesting. Then sell the lowest-gain holding.',
+                      goal: 'Your house down payment goal slips by ~8 months. We can rebuild it after the withdrawal.',
+                      tax: 'Estimated tax: ~$58 (offset by harvested losses)',
+                    };
+                  }
+                  return (
+                    <div className="scenario-result">
+                      <p className="scenario-title">{sd.title}</p>
+                      <div className="scenario-numbers">
+                        <div className="sc-num">
+                          <span>Today</span>
+                          <strong>{usdFromInr(sd.before)}</strong>
+                        </div>
+                        <div className="sc-arrow">→</div>
+                        <div className="sc-num">
+                          <span>{sd.deltaLabel}</span>
+                          <strong className={sd.deltaValue < 0 ? 'loss' : 'gain'}>{sd.deltaValue < 0 ? '-' : '+'}{usdFromInr(Math.abs(sd.deltaValue))}</strong>
+                        </div>
+                        <div className="sc-arrow">→</div>
+                        <div className="sc-num">
+                          <span>After</span>
+                          <strong>{usdFromInr(sd.after)}</strong>
+                        </div>
+                      </div>
+                      <div className="scenario-move">
+                        <p className="sc-label">Recommended move</p>
+                        <p className="sc-action">{sd.move}</p>
+                        <div className="sc-footer">
+                          <span className="sc-impact">{sd.goal}</span>
+                          <span className="sc-tax">{sd.tax}</span>
+                        </div>
+                        <p className="sc-why"><b>Why:</b> {sd.why}</p>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+
+            <section className="holdings">
+              <div className="section-head">
+                <h3>Your holdings</h3>
+                <a>Add money</a>
+              </div>
+              {holdings.map((h) => (
+                <div className="holding-row" key={h.name}>
+                  <div><strong>{h.name}</strong><br /><span>{h.type}</span></div>
+                  <div>{usdFromInr(h.value)}</div>
+                  <div className={h.gain >= 0 ? 'gain' : 'loss'}>{h.gain >= 0 ? '+' : ''}{usdFromInr(h.gain)}</div>
+                  <svg className={h.gain >= 0 ? 'spark up' : 'spark down'} viewBox="0 0 120 24">
+                    <polyline points={h.gain >= 0 ? '4,18 38,15 76,9 116,5' : '4,5 38,8 76,15 116,20'} />
+                  </svg>
+                </div>
+              ))}
+            </section>
+
+            <section className="allocation" id="allocation-section">
+              <div className="alloc-header">
+                <h3>How your money is spread out</h3>
+                <span className={`alloc-status ${allocAligned ? 'aligned' : ''}`}>
+                  {allocAligned ? 'Aligned with your comfort' : `${allocOffTarget}% off your comfort target`}
+                </span>
+              </div>
+              <p className="hint">More small cap means more bumpiness. Bonds and cash smooth things out.</p>
+
+              <div className="alloc-label">Your current mix</div>
+              <div className="alloc-bar">
+                {profile.allocation.map((a) => {
+                  const cur = fixApplied ? a.applied : a.current;
+                  return (
+                    <div key={a.name} className="alloc-segment" style={{ width: `${cur}%`, background: a.color }}>
+                      {cur >= 8 ? `${cur}%` : ''}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="alloc-label target">Your comfort target</div>
+              <div className="alloc-bar target-bar">
+                {profile.allocation.map((a) => (
+                  <div key={a.name} className="alloc-segment" style={{ width: `${a.target}%`, background: a.color }}>
+                    {a.target >= 8 ? `${a.target}%` : ''}
+                  </div>
+                ))}
+              </div>
+
+              <div className="alloc-list">
+                {profile.allocation.map((a) => {
+                  const cur = fixApplied ? a.applied : a.current;
+                  const diff = cur - a.target;
+                  const offTarget = Math.abs(diff) > 4;
+                  return (
+                    <div key={a.name} className={`alloc-row ${offTarget ? 'off-target' : 'on-target'}`}>
+                      <div className="alloc-color" style={{ background: a.color }}></div>
+                      <strong>{a.name}</strong>
+                      <span className="alloc-now">{cur}%</span>
+                      <span className="alloc-target">target {a.target}%</span>
+                      {offTarget
+                        ? <em>{diff > 0 ? `${diff}% over` : `${Math.abs(diff)}% under`}</em>
+                        : <em className="ok">on target</em>}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className={`risk-check ${fixApplied ? 'fixApplied' : ''}`}>
+              <div className="risk-left">
+                <h3>Risk match check</h3>
+                <div className="risk-line"><span>Your comfort zone</span><b>{profile.comfortLabel}</b></div>
+                <div className="bar blue"><i style={{ width: `${profile.comfortWidth}%` }}></i></div>
+                <div className="risk-line"><span>Your portfolio risk</span><b className={fixApplied ? 'green-label' : 'pink'}>{fixApplied ? 'Aligned' : 'Aggressive'}</b></div>
+                <div className="bar pinkbar"><i style={{ width: `${fixApplied ? profile.fixedRiskWidth : profile.riskWidth}%` }}></i></div>
+                {fixApplied && <div className="applied-note">Fix applied: portfolio risk now sits closer to {profile.name}'s comfort zone.</div>}
+              </div>
+              <div className="fix-card">
+                <p>Suggested fix</p>
+                <strong>{selected === 'sofia' ? 'Move 15% to safer funds' : 'Move 10% to bonds'}</strong>
+                <button onClick={() => setFixApplied(!fixApplied)}>{fixApplied ? 'Undo fix' : 'Apply fix'}</button>
+              </div>
+            </section>
+
+            <section className="goals" id="goals-section">
+              <h3>Your goals</h3>
+              <div className="goal-grid">
+                {profile.goals.map((g) => (
+                  <div className={`goal ${planApplied ? 'goal-applied' : ''}`} key={g.name}>
+                    <div><strong>{g.name}</strong><span>{g.status}</span></div>
+                    <div className="progress"><i style={{ width: `${planApplied ? g.appliedProgress : g.progress}%` }}></i></div>
+                    <p>{planApplied ? g.appliedText : g.text}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <div className="market-banner">
+              Market is down 3.2% this week. We've factored this in. Fund goals carefully, not by panic-selling loss-making assets.
+            </div>
+
+            <div className="bottom-grid">
+              <section className="debts">
+                <h3>Your debts</h3>
+                {profile.debts.map((d) => (
+                  <div className={`priority ${d.priority}`} key={d.name}>
+                    <strong>{d.name}</strong>
+                    <span>{d.owed}</span>
+                    <em>{d.rate}</em>
+                  </div>
+                ))}
+              </section>
+              <section className={`combo ${planApplied ? 'combo-applied' : ''}`}>
+                <h3>Three moves that work together</h3>
+                {profile.moves.map((m, idx) => (
+                  <div key={idx} className="move-item">
+                    <p className="move-action"><b>{idx + 1}.</b> {m.action}</p>
+                    <div className="move-meta">
+                      <span className="move-impact">{m.impact}</span>
+                      <span className="move-tax">{m.tax}</span>
+                    </div>
+                  </div>
+                ))}
+                <button onClick={() => setPlanApplied(!planApplied)}>{planApplied ? 'Undo 3-step plan' : 'Apply this 3-step plan'}</button>
+                {planApplied && <div className="plan-success">{profile.appliedMessage}</div>}
+              </section>
+            </div>
+
+            {historyOpen && (
+              <section className="history-panel">
+                <h3>History</h3>
+                {profile.history.map((item) => <p key={item}>• {item}</p>)}
+              </section>
+            )}
+
+            <div className="looking">
+              <strong>Looking ahead</strong><br />
+              {planApplied
+                ? 'Your plan is now updated. Your next big goal moved closer, while risk and cash needs are better balanced.'
+                : "If you stick to this plan, your highest-priority money goal is funded first. You'll be ready for the big plan you mentioned by mid-2027."}
+            </div>
+
+            <footer>
+              <span><b>How it works</b><br />No black box. Plain English logic.</span>
+              <span><b>Your data is safe</b><br />Bank-level encryption. Never sold.</span>
+              <span><b>No commissions</b><br />We don't earn from your trades.</span>
+              <span><b>Need a moment?</b><br />Talk me down ↗</span>
+            </footer>
+          </main>
+
+          <button className="transparency-fab" onClick={() => setTransparencyOpen(true)}>
+            <span className="fab-icon">i</span>
+            <span>Why these recommendations?</span>
+          </button>
+
+          {transparencyOpen && (
+            <React.Fragment>
+              <div className="backdrop" onClick={() => setTransparencyOpen(false)}></div>
+              <aside className="transparency-panel">
+                <button className="close-btn" onClick={() => setTransparencyOpen(false)}>✕</button>
+                <h3>How we figure things out</h3>
+                <p className="hint">No black boxes. Here's exactly what we use to give {profile.name} advice.</p>
+
+                <div className="trans-section">
+                  <h4>What you told us</h4>
+                  <div className="trans-row"><span>Risk comfort</span><b>{profile.riskFeeling}</b></div>
+                  <div className="trans-row"><span>Income steadiness</span><b>{profile.steadiness}</b></div>
+                  <div className="trans-row"><span>Main paycheck</span><b>{profile.mainIncome}</b></div>
+                  <div className="trans-row"><span>Cash savings</span><b>{profile.savings}</b></div>
+                  <div className="trans-row"><span>Total debt</span><b>{profile.totalDebt}</b></div>
+                </div>
+
+                <div className="trans-section">
+                  <h4>Your current numbers</h4>
+                  <div className="trans-row"><span>Portfolio value</span><b>{usdFromInr(profile.totalValue)}</b></div>
+                  <div className="trans-row"><span>8-month return</span><b className="pos">+{profile.gainPercent}%</b></div>
+                  <div className="trans-row"><span>Comfort score</span><b>{profile.comfortWidth} / 100</b></div>
+                  <div className="trans-row"><span>Portfolio risk score</span><b className={fixApplied ? 'pos' : 'warn'}>{fixApplied ? profile.fixedRiskWidth : profile.riskWidth} / 100</b></div>
+                  <div className="trans-row"><span>Risk gap</span><b className={fixApplied ? 'pos' : 'warn'}>{fixApplied ? `${profile.fixedRiskWidth - profile.comfortWidth} pts (aligned)` : `${profile.riskWidth - profile.comfortWidth} pts over comfort`}</b></div>
+                </div>
+
+                <div className="trans-section">
+                  <h4>Your allocation vs target</h4>
+                  {profile.allocation.map((a) => {
+                    const cur = fixApplied ? a.applied : a.current;
+                    const diff = cur - a.target;
+                    return (
+                      <div className="trans-row" key={a.name}>
+                        <span>{a.name}</span>
+                        <b className={Math.abs(diff) > 4 ? 'warn' : 'pos'}>{cur}% / target {a.target}%</b>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="trans-section">
+                  <h4>Why we recommend the actions you see</h4>
+                  <ul>
+                    <li>Your portfolio risk score sits {Math.max(0, profile.riskWidth - profile.comfortWidth)} points above your stated comfort, so we suggest moving some equity into safer funds.</li>
+                    <li>Cash savings of {profile.savings} are below the 6-month emergency target, so we direct goal funding there first.</li>
+                    <li>Small cap exposure is {profile.allocation[2].current}% versus a target of {profile.allocation[2].target}%, which drives bumpiness above your comfort zone.</li>
+                    <li>The market is down 3.2% this week, so we avoid recommending sales of loss-making positions and instead target gains.</li>
+                  </ul>
+                </div>
+              </aside>
+            </React.Fragment>
+          )}
+        </div>
+      );
+    }
+
+    function Section({ n, title, children }) {
+      return <section className="form-section"><h2><span>{n}</span>{title}</h2>{children}</section>;
+    }
+    function Field({ label, value, green }) {
+      return <label className="field"><span>{label}</span><input className={green ? 'green' : ''} value={value} readOnly /></label>;
+    }
+    function Card({ title, main, note, danger, onClick }) {
+      return <button className={`card ${danger ? 'danger' : ''}`} onClick={onClick}><p>{title}</p><strong>{main}</strong><span>{note}</span></button>;
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
